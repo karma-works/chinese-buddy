@@ -40,7 +40,7 @@ Edit `backend/.env`:
 OPENAI_API_KEY=sk-your-key-here
 CHINESE_BUDDY_MODEL=openai:gpt-4.1-mini
 CHINESE_BUDDY_DB_PATH=./chinese-buddy.sqlite3
-CHINESE_BUDDY_CORS_ORIGINS=http://localhost:5173,https://karma-works.github.io
+CHINESE_BUDDY_CORS_ORIGINS=http://localhost:5173,http://flywheel1,http://flywheel1:5173,https://flywheel1,https://karma-works.github.io
 ```
 
 Start the local backend:

@@ -15,6 +15,14 @@ const defaultApiBase = localStorage.getItem("chineseBuddyApiBase") ?? "http://lo
 const starterPrompt =
   "Teach me 20 Mandarin words for business travel. Start with Group 1 and quiz me after five words.";
 
+function createThreadId() {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID();
+  }
+  const randomPart = Math.random().toString(36).slice(2);
+  return `thread-${Date.now().toString(36)}-${randomPart}`;
+}
+
 function App() {
   const [apiBase, setApiBase] = useState(defaultApiBase);
   const [draftApiBase, setDraftApiBase] = useState(defaultApiBase);
@@ -32,7 +40,7 @@ function App() {
   const threadId = useMemo(() => {
     const existing = sessionStorage.getItem("chineseBuddyThreadId");
     if (existing) return existing;
-    const created = crypto.randomUUID();
+    const created = createThreadId();
     sessionStorage.setItem("chineseBuddyThreadId", created);
     return created;
   }, []);

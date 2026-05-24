@@ -40,7 +40,13 @@ def get_agent():
 def cors_origins() -> list[str]:
     configured = os.getenv("CHINESE_BUDDY_CORS_ORIGINS", "")
     origins = [origin.strip() for origin in configured.split(",") if origin.strip()]
-    return origins or ["http://localhost:5173", "https://karma-works.github.io"]
+    return origins or [
+        "http://localhost:5173",
+        "http://flywheel1",
+        "http://flywheel1:5173",
+        "https://flywheel1",
+        "https://karma-works.github.io",
+    ]
 
 
 app = FastAPI(title="Chinese Buddy API")
