@@ -2,7 +2,7 @@
 
 ![Chinese Buddy logo](frontend/public/logo.png)
 
-Chinese Buddy is a strict Mandarin tutor for vocabulary, writing practice, and pronunciation support. It teaches five-word groups, generates mnemonics and example sentences, quizzes the learner, validates answers, and stores learner memory locally.
+Chinese Buddy is a strict Mandarin tutor for vocabulary, writing practice, and pronunciation support. It teaches five-word groups, generates pronunciation mnemonics and example sentences, quizzes the learner, validates answers, and stores learner memory locally.
 
 The deployed UI is static and runs on GitHub Pages. The tutor backend runs locally so API keys stay server-side.
 
@@ -139,7 +139,7 @@ Plain HTTP is still fine when both frontend and backend are opened over HTTP, fo
 1. Start the backend.
 2. Open the local or hosted UI.
 3. Send: `Teach me 20 Mandarin words for business travel.`
-4. Confirm Group 1 streams with five words, pinyin, meanings, examples, and mnemonics.
+4. Confirm Group 1 streams with five words, pinyin, meanings, examples, and pronunciation mnemonics.
 5. Answer the quiz with at least one intentional mistake.
 6. Confirm the tutor corrects you, records the weak word, and retests.
 7. Ask a pronunciation or writing follow-up.

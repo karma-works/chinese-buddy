@@ -4,7 +4,7 @@ Last updated: 2026-05-23
 
 ## Target MVP
 
-Build a local web chat app that streams responses from a Deep Agents based strict Mandarin tutor. The tutor generates five-word vocabulary groups, quizzes the user, validates answers, answers follow-up questions, and persists learner memory.
+Build a local web chat app that streams responses from a Deep Agents based strict Mandarin tutor. The tutor generates five-word vocabulary groups with pronunciation-focused mnemonics, quizzes the user, validates answers, answers follow-up questions, and persists learner memory.
 
 ## Milestone 1: Project Skeleton
 
@@ -49,6 +49,7 @@ Deliverables:
 Acceptance criteria:
 
 - The agent produces the target five-word lesson format.
+- Mnemonics target pinyin pronunciation and tones rather than character shapes.
 - The agent asks a quiz after each group.
 - The agent validates user answers instead of only generating lessons.
 - The implementation uses the real Deep Agents agent loop.
@@ -106,7 +107,7 @@ Acceptance criteria:
 1. Start the local app.
 2. Open the chat UI.
 3. Ask: `Teach me 20 Mandarin words for business travel.`
-4. Confirm the tutor streams Group 1 with five words, pinyin, meanings, examples, and mnemonics.
+4. Confirm the tutor streams Group 1 with five words, pinyin, meanings, examples, and pronunciation mnemonics.
 5. Submit quiz answers with at least one intentional mistake.
 6. Confirm the tutor identifies the mistake, explains the correction, and retests.
 7. Ask a follow-up pronunciation or writing question.
