@@ -169,6 +169,13 @@ p {
   box-shadow: 0 8px 24px rgb(32 25 16 / 8%);
 }
 
+.message-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+}
+
 pre {
   margin: 0;
   white-space: pre-wrap;
@@ -177,6 +184,49 @@ pre {
     "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Inter, ui-sans-serif, system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.55;
+}
+
+.info-button {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d7cec0;
+  border-radius: 6px;
+  background: #fffaf2;
+  color: #5d665f;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.info-button:hover,
+.info-button:focus-visible {
+  color: #17211d;
+  border-color: #a99d8d;
+  outline: none;
+}
+
+.json-panel {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #d7cec0;
+  border-radius: 6px;
+  background: #f7f3ec;
+  color: #28312c;
+}
+
+.json-panel pre {
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-x: auto;
+}
+
+.json-panel pre + pre {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #d7cec0;
 }
 
 .streaming,

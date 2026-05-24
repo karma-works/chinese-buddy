@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { Bot, CheckCircle2, Loader2, Send, Settings2, User } from "lucide-react";
+import { Bot, CheckCircle2, Info, Loader2, Send, Settings2, User } from "lucide-react";
 import "./styles.css";
 
 type Role = "user" | "assistant";
@@ -21,6 +21,129 @@ function createThreadId() {
   }
   const randomPart = Math.random().toString(36).slice(2);
   return `thread-${Date.now().toString(36)}-${randomPart}`;
+}
+
+function formatJsonBlock(raw: string) {
+  try {
+    return JSON.stringify(JSON.parse(raw), null, 2);
+  } catch {
+    return "";
+  }
+}
+
+function findJsonEnd(input: string, start: number) {
+  const open = input[start];
+  const close = open === "{" ? "}" : "]";
+  const stack = [close];
+  let inString = false;
+  let escaping = false;
+
+  for (let index = start + 1; index < input.length; index += 1) {
+    const char = input[index];
+
+    if (inString) {
+      if (escaping) {
+        escaping = false;
+      } else if (char === "\\") {
+        escaping = true;
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+    } else if (char === "{" || char === "[") {
+      stack.push(char === "{" ? "}" : "]");
+    } else if (char === close || char === "}" || char === "]") {
+      if (char !== stack.pop()) return -1;
+      if (stack.length === 0) return index + 1;
+    }
+  }
+
+  return -1;
+}
+
+function splitMessageContent(content: string) {
+  const jsonBlocks: string[] = [];
+  let visibleText = "";
+  let index = 0;
+
+  while (index < content.length) {
+    const char = content[index];
+    if (char !== "{" && char !== "[") {
+      visibleText += char;
+      index += 1;
+      continue;
+    }
+
+    const end = findJsonEnd(content, index);
+    if (end === -1) {
+      visibleText += char;
+      index += 1;
+      continue;
+    }
+
+    const candidate = content.slice(index, end);
+    const formatted = formatJsonBlock(candidate);
+    if (!formatted) {
+      visibleText += char;
+      index += 1;
+      continue;
+    }
+
+    jsonBlocks.push(formatted);
+    index = end;
+  }
+
+  return {
+    visibleText: visibleText.replace(/\n{3,}/g, "\n\n").trim(),
+    jsonBlocks,
+  };
+}
+
+function ChatMessage({ message, index }: { message: Message; index: number }) {
+  const [showInfo, setShowInfo] = useState(false);
+  const { visibleText, jsonBlocks } = useMemo(() => {
+    if (message.role === "user") {
+      return { visibleText: message.content, jsonBlocks: [] };
+    }
+    return splitMessageContent(message.content);
+  }, [message.content, message.role]);
+  const hasInfo = message.role === "assistant" && jsonBlocks.length > 0;
+  const displayedText = visibleText || (message.content ? "" : " ");
+
+  return (
+    <article className={`message ${message.role}`} key={`${message.role}-${index}`}>
+      <div className="avatar" aria-hidden="true">
+        {message.role === "assistant" ? <Bot size={18} /> : <User size={18} />}
+      </div>
+      <div className="bubble">
+        <div className="message-body">
+          <pre>{displayedText}</pre>
+          {hasInfo ? (
+            <button
+              type="button"
+              className="info-button"
+              aria-label={showInfo ? "Hide response metadata" : "Show response metadata"}
+              title={showInfo ? "Hide response metadata" : "Show response metadata"}
+              onClick={() => setShowInfo((current) => !current)}
+            >
+              <Info size={16} />
+            </button>
+          ) : null}
+        </div>
+        {showInfo ? (
+          <div className="json-panel">
+            {jsonBlocks.map((block, blockIndex) => (
+              <pre key={blockIndex}>{block}</pre>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </article>
+  );
 }
 
 function App() {
@@ -166,14 +289,7 @@ function App() {
 
         <div className="messages">
           {messages.map((message, index) => (
-            <article className={`message ${message.role}`} key={`${message.role}-${index}`}>
-              <div className="avatar" aria-hidden="true">
-                {message.role === "assistant" ? <Bot size={18} /> : <User size={18} />}
-              </div>
-              <div className="bubble">
-                <pre>{message.content}</pre>
-              </div>
-            </article>
+            <ChatMessage message={message} index={index} key={`${message.role}-${index}`} />
           ))}
           {isStreaming ? (
             <div className="streaming">
