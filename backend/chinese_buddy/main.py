@@ -16,6 +16,23 @@ from .tutor import build_agent, stream_tutor_response
 
 load_dotenv()
 
+DEFAULT_CORS_ORIGINS = [
+    "http://localhost:5173",
+    "http://flywheel1",
+    "http://flywheel1:5173",
+    "https://flywheel1",
+    "https://karma-works.github.io",
+]
+
+DEFAULT_CORS_ORIGIN_REGEX = (
+    r"^https?://("
+    r"localhost|"
+    r"127\.0\.0\.1|"
+    r"flywheel1|"
+    r"100\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+    r")(:\d+)?$"
+)
+
 
 class ChatMessage(BaseModel):
     role: str = Field(pattern="^(user|assistant|system)$")
@@ -40,19 +57,18 @@ def get_agent():
 def cors_origins() -> list[str]:
     configured = os.getenv("CHINESE_BUDDY_CORS_ORIGINS", "")
     origins = [origin.strip() for origin in configured.split(",") if origin.strip()]
-    return origins or [
-        "http://localhost:5173",
-        "http://flywheel1",
-        "http://flywheel1:5173",
-        "https://flywheel1",
-        "https://karma-works.github.io",
-    ]
+    return list(dict.fromkeys([*DEFAULT_CORS_ORIGINS, *origins]))
+
+
+def cors_origin_regex() -> str:
+    return os.getenv("CHINESE_BUDDY_CORS_ORIGIN_REGEX", DEFAULT_CORS_ORIGIN_REGEX)
 
 
 app = FastAPI(title="Chinese Buddy API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins(),
+    allow_origin_regex=cors_origin_regex(),
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
