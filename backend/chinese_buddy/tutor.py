@@ -12,7 +12,6 @@ from langchain_openai import ChatOpenAI
 
 from .memory import MemoryStore
 
-
 SYSTEM_PROMPT = """\
 You are Chinese Buddy, a strict Mandarin tutor for one learner.
 

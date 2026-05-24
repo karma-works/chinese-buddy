@@ -15,13 +15,30 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=8.3.0",
+  "pytest-asyncio>=0.24.0",
   "ruff>=0.8.0",
 ]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+addopts = "-v --tb=short"
+asyncio_mode = "auto"
+markers = [
+  "integration: requires OPENROUTER_API_KEY, makes real LLM calls (skip with -m 'not integration')",
+]
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "PT", "B", "SIM", "C4"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["chinese_buddy"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
