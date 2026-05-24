@@ -56,7 +56,7 @@ def build_chat_model() -> ChatOpenAI:
         "X-Title": os.getenv("OPENROUTER_APP_TITLE", "Chinese Buddy"),
     }
     return ChatOpenAI(
-        model=os.getenv("CHINESE_BUDDY_MODEL", "openai/gpt-4.1-mini"),
+        model=os.getenv("CHINESE_BUDDY_MODEL", "openai/gpt-5.5"),
         api_key=api_key,
         base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
         default_headers=headers,

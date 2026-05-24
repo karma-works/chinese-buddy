@@ -19,7 +19,7 @@ Last updated: 2026-05-24
 
 Deep Agents is strongest in Python and sits on top of LangChain and LangGraph. Keeping the agent backend in Python avoids fighting the framework while still letting the UI stay lightweight and easy to deploy.
 
-OpenRouter should be used as the default model gateway. OpenRouter exposes an OpenAI-compatible API at `https://openrouter.ai/api/v1`, so the backend can keep the LangChain OpenAI-compatible client while using `OPENROUTER_API_KEY` and OpenRouter model ids such as `openai/gpt-4.1-mini`.
+OpenRouter should be used as the default model gateway. OpenRouter exposes an OpenAI-compatible API at `https://openrouter.ai/api/v1`, so the backend can keep the LangChain OpenAI-compatible client while using `OPENROUTER_API_KEY` and OpenRouter model ids such as `openai/gpt-5.5`.
 
 GitHub Pages can host only static frontend assets. The LLM-backed tutor must run somewhere else because private API keys cannot be safely embedded in a static site. For the MVP, the correct split is:
 
