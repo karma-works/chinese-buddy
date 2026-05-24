@@ -8,6 +8,7 @@ from typing import Any
 
 from deepagents import create_deep_agent
 from langchain.tools import tool
+from langchain_openai import ChatOpenAI
 
 from .memory import MemoryStore
 
@@ -40,6 +41,26 @@ Rules:
 
 def _normalize(value: str) -> str:
     return " ".join(value.casefold().strip().split())
+
+
+def build_chat_model() -> ChatOpenAI:
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        raise RuntimeError("Set OPENROUTER_API_KEY in backend/.env before starting the tutor.")
+
+    headers = {
+        "HTTP-Referer": os.getenv(
+            "OPENROUTER_HTTP_REFERER",
+            "https://karma-works.github.io/chinese-buddy/",
+        ),
+        "X-Title": os.getenv("OPENROUTER_APP_TITLE", "Chinese Buddy"),
+    }
+    return ChatOpenAI(
+        model=os.getenv("CHINESE_BUDDY_MODEL", "openai/gpt-4.1-mini"),
+        api_key=api_key,
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+        default_headers=headers,
+    )
 
 
 def build_agent(store: MemoryStore):
@@ -98,7 +119,7 @@ def build_agent(store: MemoryStore):
             ensure_ascii=False,
         )
 
-    model = os.getenv("CHINESE_BUDDY_MODEL", "openai:gpt-4.1-mini")
+    model = build_chat_model()
     return create_deep_agent(
         model=model,
         tools=[load_learner_memory, record_lesson_words, record_quiz_attempt, grade_short_answer],

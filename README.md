@@ -15,7 +15,7 @@ https://karma-works.github.io/chinese-buddy/
 ## Tech Stack
 
 - Deep Agents v0.6 for the tutor agent loop.
-- LangChain model integrations, starting with OpenAI.
+- LangChain OpenAI-compatible model integration pointed at OpenRouter.
 - FastAPI backend.
 - SQLite local learner memory.
 - React, TypeScript, and Vite frontend.
@@ -37,11 +37,20 @@ cp .env.example .env
 Edit `backend/.env`:
 
 ```bash
-OPENAI_API_KEY=sk-your-key-here
-CHINESE_BUDDY_MODEL=openai:gpt-4.1-mini
+OPENROUTER_API_KEY=sk-or-your-key-here
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+OPENROUTER_HTTP_REFERER=https://karma-works.github.io/chinese-buddy/
+OPENROUTER_APP_TITLE=Chinese Buddy
+CHINESE_BUDDY_MODEL=openai/gpt-4.1-mini
 CHINESE_BUDDY_DB_PATH=./chinese-buddy.sqlite3
 CHINESE_BUDDY_CORS_ORIGINS=http://localhost:5173,http://flywheel1,http://flywheel1:5173,https://flywheel1,https://karma-works.github.io
 CHINESE_BUDDY_CORS_ORIGIN_REGEX=^https?://(localhost|127\.0\.0\.1|flywheel1|100\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?$
+```
+
+Create the API key in OpenRouter, then choose any OpenRouter model id that supports tool calling. The default is:
+
+```bash
+CHINESE_BUDDY_MODEL=openai/gpt-4.1-mini
 ```
 
 Start the local backend:
