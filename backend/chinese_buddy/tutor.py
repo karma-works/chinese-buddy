@@ -134,6 +134,12 @@ def extract_text_from_chunk(chunk: Any) -> str:
         return ""
 
     messages = chunk.get("messages")
+    if messages is None:
+        for value in chunk.values():
+            text = extract_text_from_chunk(value)
+            if text:
+                return text
+
     if not messages:
         return ""
 
